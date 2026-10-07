@@ -17,9 +17,22 @@ export function Nav({ page }: { page: PageId }) {
   const time = useJaipurTime()
   const tabsRef = useRef<HTMLDivElement>(null)
 
-  // keep the active tab visible when the tab row scrolls on small screens
+  const [pill, setPill] = useState<{ x: number; w: number } | null>(null)
+
+  // slide the white pill under the active tab, and keep it visible when the row scrolls on small screens
   useEffect(() => {
-    tabsRef.current?.querySelector('.active')?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' })
+    const tabs = tabsRef.current
+    if (!tabs) return
+    const place = () => {
+      const active = tabs.querySelector<HTMLElement>('.tab.active')
+      if (active) setPill({ x: active.offsetLeft, w: active.offsetWidth })
+    }
+    place()
+    tabs.querySelector('.active')?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' })
+    const ro = new ResizeObserver(place)
+    ro.observe(tabs)
+    document.fonts?.ready.then(place)
+    return () => ro.disconnect()
   }, [page])
 
   return (
@@ -32,6 +45,7 @@ export function Nav({ page }: { page: PageId }) {
       </a>
 
       <nav className="tabs" ref={tabsRef} aria-label="Sections">
+        {pill && <span className="tab-pill" style={{ transform: `translateX(${pill.x}px)`, width: pill.w }} aria-hidden="true" />}
         {PAGES.map((id) => (
           <a key={id} href={`#/${id}`} className={`tab ${page === id ? 'active' : ''}`} aria-current={page === id ? 'page' : undefined}>
             {LABELS[id]}

@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { go } from '../router'
+import { CountUp } from './CountUp'
 import { Icon } from './Icons'
 
 export function Panel({ children, className = '', style }: { children: ReactNode; className?: string; style?: CSSProperties }) {
@@ -39,7 +40,7 @@ export function Stat({ value, unit, label, icon, children }: { value: string; un
   return (
     <Panel className="stat">
       <div className="stat-top">
-        <span className="pixel stat-value">{value}</span>
+        <CountUp className="pixel stat-value" value={value} />
         {unit && <span className="stat-unit">{unit}</span>}
         {icon && <IconChip>{icon}</IconChip>}
       </div>
@@ -61,7 +62,7 @@ type ButtonProps = {
 }
 
 export function Button({ children, variant = 'dark', icon, trailing, href, onClick, download, className = '' }: ButtonProps) {
-  const cls = `btn btn-${variant} ${className}`
+  const cls = `btn btn-${variant} ${trailing ? 'has-trailing' : ''} ${className}`
   const inner = (
     <>
       {icon}
@@ -100,7 +101,7 @@ export function PageTop({ title, intro, counter, meter }: { title: string; intro
 export function MeterHead({ value, unit, icon }: { value: string; unit: string; icon: ReactNode }) {
   return (
     <div className="meter-head">
-      <span className="pixel meter-value">{value}</span>
+      <CountUp className="pixel meter-value" value={value} />
       <span className="meter-unit">{unit}</span>
       <IconChip>{icon}</IconChip>
     </div>

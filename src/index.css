@@ -117,17 +117,19 @@ button {
   margin-top: 14px;
 }
 
-.view > * {
-  animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+/* scroll reveal: classes are added by usePageMotion */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
 }
-.view > *:nth-child(2) { animation-delay: 0.06s; }
-.view > *:nth-child(3) { animation-delay: 0.12s; }
-.view > *:nth-child(4) { animation-delay: 0.18s; }
-.view > *:nth-child(n + 5) { animation-delay: 0.24s; }
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+.reveal.in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    background 0.2s, border-color 0.25s, box-shadow 0.25s, color 0.2s;
+  transition-delay: calc(var(--i, 0) * 60ms), calc(var(--i, 0) * 60ms), 0s, 0s, 0s, 0s;
 }
 
 .panel {
@@ -140,6 +142,24 @@ button {
     0 12px 32px rgba(16, 32, 54, 0.12);
   backdrop-filter: blur(14px) saturate(1.1);
   -webkit-backdrop-filter: blur(14px) saturate(1.1);
+}
+
+/* soft spotlight that follows the cursor (position fed by usePageMotion) */
+.panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.09), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.panel:hover::after {
+  opacity: 1;
+}
+.panel:hover {
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 .footer {
@@ -195,6 +215,14 @@ button {
 .brand-mark i:nth-child(5) {
   background: var(--signal);
 }
+.brand:hover .brand-mark i {
+  animation: blink 0.9s ease-in-out;
+}
+.brand-mark i:nth-child(3n + 2) { animation-delay: 0.08s !important; }
+.brand-mark i:nth-child(3n) { animation-delay: 0.16s !important; }
+@keyframes blink {
+  50% { transform: scale(0.4); opacity: 0.5; }
+}
 
 .brand-name {
   font-size: 19px;
@@ -225,6 +253,27 @@ button {
 
 .tab:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.tabs {
+  position: relative;
+}
+.tab-pill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 14px;
+  background: var(--paper);
+  box-shadow: 0 4px 14px rgba(20, 35, 60, 0.18);
+  transition: transform 0.45s cubic-bezier(0.3, 1.2, 0.4, 1), width 0.45s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+.tab {
+  z-index: 1;
+}
+.tabs:has(.tab-pill) .tab.active {
+  background: transparent;
+  box-shadow: none;
 }
 
 .tab.active {
@@ -278,6 +327,7 @@ button {
 }
 
 .avatar {
+  transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
   display: grid;
   place-items: center;
   width: 42px;
@@ -308,8 +358,24 @@ button {
   height: 20px;
 }
 
+.btn:hover {
+  transform: translateY(-2px);
+}
 .btn:active {
-  transform: scale(0.985);
+  transform: translateY(0) scale(0.985);
+  transition-duration: 0.08s;
+}
+.btn svg {
+  transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.btn:hover svg:first-child:not(:last-child) {
+  transform: translateY(-1px) rotate(-6deg);
+}
+.btn.has-trailing:hover svg:last-child {
+  transform: translateX(4px);
+}
+.btn-light:hover {
+  box-shadow: 0 12px 28px rgba(10, 22, 38, 0.24);
 }
 
 .btn-dark {
@@ -430,6 +496,8 @@ button {
 }
 .segbar span.on {
   background: var(--paper);
+}
+.in .segbar span.on {
   animation: seg 0.4s both;
 }
 @keyframes seg {
@@ -448,12 +516,17 @@ button {
   height: 100%;
   border-radius: 8px;
   background: var(--paper);
-  animation: grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both 0.15s;
   transform-origin: left;
 }
 .trackbar .over {
   height: 100%;
   background: var(--signal);
+}
+.reveal:not(.in) .trackbar .fill {
+  transform: scaleX(0);
+}
+.in .trackbar .fill {
+  animation: grow 1s cubic-bezier(0.2, 0.7, 0.2, 1) both 0.2s;
 }
 @keyframes grow {
   from { transform: scaleX(0); }
@@ -1310,7 +1383,145 @@ button {
     border-color: #ddd;
     break-inside: avoid;
   }
-  .view > * {
-    animation: none;
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
   }
+  .panel::after {
+    display: none;
+  }
+}
+
+/* ---------- interaction details ---------- */
+
+.icon-chip svg {
+  transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.icon-chip {
+  transition: background 0.25s;
+}
+.panel:hover > * .icon-chip,
+.panel:hover > .icon-chip,
+.result:hover .icon-chip {
+  background: rgba(255, 255, 255, 0.22);
+}
+.panel:hover .icon-chip svg,
+.result:hover .icon-chip svg {
+  transform: rotate(-10deg) scale(1.08);
+}
+
+.option:active {
+  transform: scale(0.98);
+}
+.option.selected .option-check {
+  animation: pop 0.4s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+@keyframes pop {
+  from { transform: scale(0.4); opacity: 0; }
+}
+
+.result,
+.chip,
+.timeline li,
+.back,
+.hero-mark {
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.2s, border-color 0.2s;
+}
+.result:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.26);
+}
+.chip:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.chip-solid:hover {
+  background: #fff;
+}
+.back:hover {
+  transform: translateX(-3px);
+}
+.hero-mark:hover {
+  transform: rotate(-6deg) scale(1.04);
+}
+.avatar:hover {
+  transform: rotate(-8deg);
+}
+
+.timeline li {
+  margin: 0 -14px;
+  padding-left: 14px;
+  padding-right: 14px;
+  border-radius: 14px;
+}
+.timeline li:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.timeline-dot {
+  transition: transform 0.3s cubic-bezier(0.3, 1.6, 0.5, 1), background 0.2s;
+}
+.timeline li:hover .timeline-dot {
+  transform: scale(1.35) rotate(45deg);
+  background: var(--paper);
+}
+.timeline li.latest .timeline-dot {
+  animation: ping 2.4s ease-out infinite;
+}
+.timeline li.latest:hover .timeline-dot {
+  background: var(--signal);
+}
+@keyframes ping {
+  0% { box-shadow: 0 0 0 0 rgba(255, 92, 63, 0.5); }
+  70%, 100% { box-shadow: 0 0 0 10px rgba(255, 92, 63, 0); }
+}
+
+.badge {
+  animation: nudge 3.2s ease-in-out infinite 1s;
+}
+@keyframes nudge {
+  0%, 88%, 100% { transform: none; }
+  92% { transform: translateY(-2px); }
+  96% { transform: translateY(0.5px); }
+}
+
+.text-link {
+  border-bottom-color: transparent;
+  background: linear-gradient(currentColor, currentColor) left bottom / 0% 1px no-repeat;
+  transition: background-size 0.3s;
+}
+.text-link:hover {
+  background-size: 100% 1px;
+}
+.text-link svg {
+  transition: transform 0.25s;
+}
+.text-link:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* dot illustrations shimmer on hover */
+.dotart circle.accent {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.work:hover .dotart circle.lit,
+.project:hover .dotart circle.lit {
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+.work:hover .dotart circle.accent,
+.project:hover .dotart circle.accent {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes shimmer {
+  50% { opacity: 0.45; }
+}
+@keyframes pulse {
+  50% { transform: scale(1.35); }
+}
+.work-art {
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.5s;
+}
+.work:hover .work-art {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 48px rgba(16, 32, 54, 0.3);
 }

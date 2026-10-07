@@ -121,7 +121,7 @@ export function DotArt({ variant, className }: { variant: ArtVariant; className?
   }, [variant])
 
   return (
-    <svg className={className} viewBox={`0 0 ${COLS * CELL} ${ROWS * CELL}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <svg className={`dotart ${className ?? ''}`} viewBox={`0 0 ${COLS * CELL} ${ROWS * CELL}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <linearGradient id={`${id}sky`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#9DB2D6" />
@@ -141,6 +141,8 @@ export function DotArt({ variant, className }: { variant: ArtVariant; className?
           key={`${x}-${y}`}
           cx={x * CELL + CELL / 2}
           cy={y * CELL + CELL / 2}
+          className={level === 3 ? 'accent' : level === 2 ? 'lit' : undefined}
+          style={level >= 2 ? { animationDelay: `${(x + y) * 35}ms` } : undefined}
           r={level === 3 ? 3.6 : level === 2 ? 3.1 : level === 1 ? 2 : 1.1}
           fill={level === 3 ? '#FF5C3F' : '#F2F3F5'}
           opacity={level === 3 ? 1 : level === 2 ? 0.95 : level === 1 ? 0.4 : 0.16}

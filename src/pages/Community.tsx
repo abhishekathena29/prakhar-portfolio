@@ -1,3 +1,4 @@
+import { CountUp } from '../components/CountUp'
 import { Icon } from '../components/Icons'
 import { IconChip, MeterHead, PageTop, Panel, SegBar, TrackBar } from '../components/ui'
 import { community, communityIntro } from '../data'
@@ -28,7 +29,7 @@ export function Community() {
             {c.stat && (
               <div className="card-stat">
                 <div className="meter-head">
-                  <span className="pixel meter-value">{c.stat.value}</span>
+                  <CountUp className="pixel meter-value" value={c.stat.value} />
                   {c.stat.unit && <span className="meter-unit">{c.stat.unit}</span>}
                   <IconChip><Icon.Spark /></IconChip>
                 </div>

@@ -1,3 +1,4 @@
+import { CountUp } from '../components/CountUp'
 import { Icon } from '../components/Icons'
 import { Button, Eyebrow, IconChip, MeterHead, PageTop, Panel, SegBar } from '../components/ui'
 import { highlights, moreResults, olympiadIntro, pathfinder, training } from '../data'
@@ -32,7 +33,7 @@ export function Olympiads() {
               {h.score ? (
                 <div className="result-score">
                   <div className="result-score-head">
-                    <span className="pixel meter-value">{h.score[0]}</span>
+                    <CountUp className="pixel meter-value" value={String(h.score[0])} />
                     <span className="meter-unit">/ {h.score[1]}</span>
                     {h.score[0] === h.score[1] && <IconChip><Icon.Check /></IconChip>}
                   </div>
