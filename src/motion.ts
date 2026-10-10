@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 
-const REVEAL = '.view .panel, .view .option, .view .result, .view .timeline li, .view .btn'
+const REVEAL = '.view .card, .view .statement, .view .feature, .view .upcoming, .view .page-head, .view .hero-copy > *, .view .hero-board > *, .view .section-side'
 
 export const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /**
- * Page-level motion: reveals cards as they scroll into view (staggered among
- * siblings) and feeds the cursor position to panels for the hover spotlight.
+ * Page-level motion: reveals cards as they scroll into view, staggered among siblings.
  */
 export function usePageMotion(page: string) {
   useEffect(() => {
@@ -35,18 +34,6 @@ export function usePageMotion(page: string) {
     els.forEach((el) => io.observe(el))
     return () => io.disconnect()
   }, [page])
-
-  useEffect(() => {
-    const onMove = (e: PointerEvent) => {
-      const panel = (e.target as Element | null)?.closest?.<HTMLElement>('.panel')
-      if (!panel) return
-      const r = panel.getBoundingClientRect()
-      panel.style.setProperty('--mx', `${e.clientX - r.left}px`)
-      panel.style.setProperty('--my', `${e.clientY - r.top}px`)
-    }
-    document.addEventListener('pointermove', onMove, { passive: true })
-    return () => document.removeEventListener('pointermove', onMove)
-  }, [])
 }
 
 export function useInView<T extends Element>() {

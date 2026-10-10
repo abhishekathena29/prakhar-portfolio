@@ -1,64 +1,60 @@
+import { Closing } from '../components/blocks'
 import { CountUp } from '../components/CountUp'
 import { Icon } from '../components/Icons'
-import { IconChip, MeterHead, PageTop, Panel, SegBar, TrackBar } from '../components/ui'
+import { Card, PageHead, Tag } from '../components/ui'
 import { community, communityIntro } from '../data'
 
 export function Community() {
   return (
     <>
-      <PageTop
-        title="Community"
-        intro={communityIntro}
-        counter={
-          <>
-            <MeterHead value="10" unit="/ 280+ applicants" icon={<Icon.Users />} />
-            <SegBar filled={10} total={280} segments={28} />
-          </>
-        }
-        meter={
-          <>
-            <MeterHead value="123%" unit="of fundraising goal" icon={<Icon.Heart />} />
-            <TrackBar value={123} max={100} overflow />
-          </>
-        }
-      />
+      <PageHead title="Community" intro={communityIntro} />
 
-      <div className="grid-2">
-        {community.map((c) => (
-          <Panel key={c.title} className={`card ${c.stat ? '' : 'card-plain'}`}>
-            {c.stat && (
-              <div className="card-stat">
-                <div className="meter-head">
-                  <CountUp className="pixel meter-value" value={c.stat.value} />
-                  {c.stat.unit && <span className="meter-unit">{c.stat.unit}</span>}
-                  <IconChip><Icon.Spark /></IconChip>
-                </div>
-                {c.stat.progress &&
-                  (c.stat.progress.overflow ? (
-                    <TrackBar value={c.stat.progress.filled} max={c.stat.progress.total} overflow />
-                  ) : (
-                    <SegBar filled={c.stat.progress.filled} total={c.stat.progress.total} segments={20} />
-                  ))}
-                <span className="stat-label">{c.stat.label}</span>
+      <section className="statement statement-stats">
+        {[
+          { value: '10', label: 'students selected from 280+ for Super 10' },
+          { value: '2,500', label: 'students elected me School Captain' },
+          { value: '350+', label: 'LogiLeague participants in year two' },
+          { value: '123%', label: 'of the Cuddles Foundation goal in 27 days' },
+        ].map((s) => (
+          <div key={s.label} className="statement-stat">
+            <CountUp className="statement-num" value={s.value} />
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </section>
+
+      <div className="grid-2 masonry">
+        {community.map((c, i) => (
+          <Card key={c.title} className="org">
+            <div className="org-top">
+              <div className="tags">
+                <Tag tone="teal">{c.role}</Tag>
+                {c.date && <Tag>{c.date}</Tag>}
               </div>
-            )}
-            <div className="meta">
-              <span>{c.role}</span>
-              {c.date && <><span className="dot" /><span>{c.date}</span></>}
+              <span className="service-num">{String(i + 1).padStart(2, '0')}</span>
             </div>
-            <h2 className="pixel card-title">{c.title}</h2>
-            {c.body.map((p) => <p key={p}>{p}</p>)}
+            <h2 className="h3">{c.title}</h2>
+            {c.body.map((p) => <p key={p} className="muted">{p}</p>)}
             {c.list && (
               <>
-                {c.listLabel && <p className="muted">{c.listLabel}</p>}
+                {c.listLabel && <p className="list-label">{c.listLabel}</p>}
                 <ul className="ticks">
                   {c.list.map((l) => <li key={l}><Icon.Check />{l}</li>)}
                 </ul>
               </>
             )}
-          </Panel>
+            {c.stat && (
+              <div className="org-stat">
+                <CountUp className="stat-num" value={c.stat.value} />
+                {c.stat.unit && <span className="stat-unit">{c.stat.unit}</span>}
+                <span className="stat-label">{c.stat.label}</span>
+              </div>
+            )}
+          </Card>
         ))}
       </div>
+
+      <Closing />
     </>
   )
 }

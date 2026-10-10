@@ -1,62 +1,59 @@
-import { DotArt } from '../components/DotArt'
+import { Art } from '../components/Art'
+import { Closing } from '../components/blocks'
+import { CountUp } from '../components/CountUp'
 import { Icon } from '../components/Icons'
-import { Button, MeterHead, Option, PageTop, Panel, SegBar, TrackBar } from '../components/ui'
+import { Button, Card, PageHead, Tag } from '../components/ui'
 import { research, researchIntro } from '../data'
 
 export function Research() {
   return (
     <>
-      <PageTop
-        title="Research"
-        intro={researchIntro}
-        counter={
-          <>
-            <MeterHead value={String(research.length)} unit="/ projects" icon={<Icon.Question />} />
-            <SegBar filled={research.length} total={research.length} segments={25} />
-          </>
-        }
-        meter={
-          <>
-            <MeterHead value="$4,700" unit="in grants and scholarships" icon={<Icon.Gem />} />
-            <TrackBar value={4700} max={4700} />
-          </>
-        }
-      />
+      <PageHead title="Research" intro={researchIntro}>
+        <div className="head-stats">
+          <div><CountUp className="stat-num" value={String(research.length)} /><span>projects</span></div>
+          <div><CountUp className="stat-num" value="$4,700" /><span>in grants and scholarships</span></div>
+        </div>
+      </PageHead>
 
       <div className="stack">
         {research.map((r, i) => (
-          <Panel key={r.title} className="work">
-            <div className="work-art">
-              <DotArt variant={r.art} />
-              <span className="work-index pixel">{String(i + 1).padStart(2, '0')}</span>
-            </div>
-            <div className="work-body">
-              <div className="meta">
-                <span>{r.role}</span>
-                <span className="dot" />
-                <span>{r.date}</span>
+          <Card key={r.title} className="study">
+            <div className="study-body">
+              <div className="study-top">
+                <span className="wordmark">{r.org}</span>
+                <span className="study-num">0{i + 1}</span>
               </div>
-              <h2 className="pixel work-title">{r.title}</h2>
+              <h2 className="h2">{r.title}</h2>
+              <div className="tags">
+                <Tag tone="teal">{r.role}</Tag>
+                <Tag>{r.date}</Tag>
+              </div>
               {r.body.map((p) => <p key={p}>{p}</p>)}
               {r.points && (
-                <div className="options options-3">
-                  {r.points.map((pt, j) => (
-                    <Option key={pt.label} letter={pt.label} selected={j === r.points!.length - 1}>
+                <ol className="steps">
+                  {r.points.map((pt) => (
+                    <li key={pt.label}>
+                      <span className="step-num">{pt.label}</span>
                       <span>{pt.text}</span>
-                    </Option>
+                    </li>
                   ))}
-                </div>
+                </ol>
               )}
               {r.notes?.map((n) => <p key={n} className="muted">{n}</p>)}
               {r.link && (
-                <div className="work-actions">
-                  <Button variant="light" href={r.link.href} trailing={<Icon.External />}>{r.link.label}</Button>
+                <div className="btn-row">
+                  <Button href={r.link.href} trailing={<Icon.External />}>{r.link.label}</Button>
                 </div>
               )}
             </div>
-          </Panel>
+            <div className="study-art">
+              <Art variant={r.art} />
+            </div>
+          </Card>
         ))}
       </div>
+
+      <Closing />
     </>
   )
 }

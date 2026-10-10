@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Footer } from './components/blocks'
 import { Nav } from './components/Nav'
 import { About } from './pages/About'
 import { Community } from './pages/Community'
@@ -31,15 +32,11 @@ export default function App() {
 
   return (
     <div className="shell">
-      <div className="backdrop" aria-hidden="true" />
       <Nav page={page} />
       <main key={page} className="view">
         <View />
       </main>
-      <footer className="footer">
-        <span className="pixel">© 2026 Prakhar Singhvi</span>
-        <span>Jaipur, India</span>
-      </footer>
+      <Footer />
     </div>
   )
 }

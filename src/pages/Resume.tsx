@@ -1,74 +1,46 @@
 import { Icon } from '../components/Icons'
-import { Button, Eyebrow, Panel } from '../components/ui'
+import { Button, Card, PageHead } from '../components/ui'
 import { RESUME_URL, community, highlights, pathfinder, profile, research } from '../data'
 
 export function Resume() {
+  const sections: { title: string; rows: [string, string][] }[] = [
+    {
+      title: 'Education',
+      rows: [
+        ['Jayshree Periwal International School', 'Grade 12, IB Diploma Programme'],
+        ['Offered the RIT High School Award', '$116,000 merit scholarship'],
+      ],
+    },
+    { title: 'Research', rows: research.map((r) => [r.title, `${r.role} · ${r.date}`]) },
+    { title: 'Teaching and writing', rows: [[pathfinder.title, 'Author · adopted by Narayana Prodigy']] },
+    { title: 'Leadership and community', rows: community.map((c) => [c.title, c.role + (c.date ? ` · ${c.date}` : '')]) },
+    { title: 'Selected honours', rows: highlights.map((h) => [h.competition, h.result]) },
+  ]
+
   return (
     <>
-      <Panel className="hero hero-compact">
-        <div className="hero-mark" aria-hidden="true"><Icon.Check /></div>
-        <p className="hero-sub">{profile.name} · {profile.location}</p>
-        <h1 className="pixel hero-title">Resume</h1>
-        <p className="hero-text">A one-page summary. The full PDF has every detail.</p>
-      </Panel>
+      <PageHead title="Resume" intro={`${profile.name} · ${profile.location}. A one-page summary; the PDF has every detail.`}>
+        <div className="btn-row no-print">
+          <Button href={RESUME_URL} download icon={<Icon.Download />}>Download PDF</Button>
+          <Button variant="ghost" onClick={() => window.print()} icon={<Icon.Printer />}>Print</Button>
+        </div>
+      </PageHead>
 
-      <div className="action-row no-print">
-        <Button onClick={() => window.print()} icon={<Icon.Printer />}>Print this page</Button>
-        <Button href="#/about" icon={<Icon.ChevronLeft />}>Back to About</Button>
-        <Button variant="light" href={RESUME_URL} download icon={<Icon.Download />}>Download PDF</Button>
+      <div className="stack">
+        {sections.map((s) => (
+          <Card key={s.title} className="resume">
+            <h2 className="h3">{s.title}</h2>
+            <div className="resume-rows">
+              {s.rows.map(([a, b]) => (
+                <div key={a} className="resume-row">
+                  <strong>{a}</strong>
+                  <span>{b}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        ))}
       </div>
-
-      <Panel className="block resume">
-        <section>
-          <Eyebrow>Education</Eyebrow>
-          <div className="resume-row">
-            <strong>Jayshree Periwal International School</strong>
-            <span>Grade 12, IB Diploma Programme</span>
-          </div>
-          <div className="resume-row">
-            <strong>Offered the RIT High School Award</strong>
-            <span>$116,000 merit scholarship</span>
-          </div>
-        </section>
-
-        <section>
-          <Eyebrow>Research</Eyebrow>
-          {research.map((r) => (
-            <div key={r.title} className="resume-row">
-              <strong>{r.title}</strong>
-              <span>{r.role} · {r.date}</span>
-            </div>
-          ))}
-        </section>
-
-        <section>
-          <Eyebrow>Teaching and writing</Eyebrow>
-          <div className="resume-row">
-            <strong>{pathfinder.title}</strong>
-            <span>Author · adopted by Narayana Prodigy</span>
-          </div>
-        </section>
-
-        <section>
-          <Eyebrow>Leadership and community</Eyebrow>
-          {community.map((c) => (
-            <div key={c.title} className="resume-row">
-              <strong>{c.title}</strong>
-              <span>{c.role}{c.date ? ` · ${c.date}` : ''}</span>
-            </div>
-          ))}
-        </section>
-
-        <section>
-          <Eyebrow>Selected honours</Eyebrow>
-          {highlights.map((h) => (
-            <div key={h.competition} className="resume-row">
-              <strong>{h.competition}</strong>
-              <span>{h.result}</span>
-            </div>
-          ))}
-        </section>
-      </Panel>
     </>
   )
 }

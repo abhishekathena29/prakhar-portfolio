@@ -1,8 +1,8 @@
 import { useId, useMemo } from 'react'
 import type { ArtVariant } from '../data'
 
-// A dot-matrix illustration drawn on a COLS x ROWS grid. Each variant is a set of
-// line segments; dots close to a segment light up, a few accent points glow orange.
+// A line illustration on a soft pastel card, drawn on a COLS x ROWS grid. Each
+// variant is a set of line segments plus a few accent points.
 
 const COLS = 32
 const ROWS = 20
@@ -94,59 +94,71 @@ function shape(variant: ArtVariant): { segs: Seg[]; accents: Pt[]; lit?: Set<str
   }
 }
 
-function dist(px: number, py: number, [x1, y1, x2, y2]: Seg) {
-  const dx = x2 - x1, dy = y2 - y1
-  const len = dx * dx + dy * dy
-  const t = len === 0 ? 0 : Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / len))
-  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy))
+const PALETTES: Record<ArtVariant, [string, string, string]> = {
+  network: ['#d7eef2', '#8ccbd6', '#127f90'],
+  triangle: ['#e6e4fb', '#b3aff3', '#5b55d6'],
+  curve: ['#e3ece2', '#a9c6a8', '#3f6d44'],
+  tree: ['#efece6', '#cfc6b6', '#7a6a4f'],
+  rising: ['#e9e7fb', '#bdb9f4', '#5b55d6'],
+  select: ['#d9eff2', '#97d0da', '#127f90'],
+  pages: ['#e3ece2', '#b2cdb0', '#3f6d44'],
+  bars: ['#e8ebf0', '#b9c3d1', '#3d4b60'],
 }
 
-export function DotArt({ variant, className }: { variant: ArtVariant; className?: string }) {
+const px = (v: number) => v * CELL + CELL / 2
+
+export function Art({ variant, className = '' }: { variant: ArtVariant; className?: string }) {
   const id = useId()
-  const dots = useMemo(() => {
-    const { segs, accents, lit, faint = [] } = shape(variant)
-    const out: { x: number; y: number; level: 0 | 1 | 2 | 3 }[] = []
-    for (let y = 0; y < ROWS; y++) {
-      for (let x = 0; x < COLS; x++) {
-        if (accents.some(([ax, ay]) => Math.hypot(ax - x, ay - y) < 0.75)) {
-          out.push({ x, y, level: 3 })
-          continue
-        }
-        const d = lit ? (lit.has(`${x},${y}`) ? 0.8 : 9) : Math.min(...segs.map((s) => dist(x, y, s)))
-        const level = d < 0.55 ? 2 : d < 1.05 ? 1 : faint.some((s) => dist(x, y, s) < 0.5) ? 1 : 0
-        out.push({ x, y, level })
-      }
+  const [light, mid, ink] = PALETTES[variant]
+  const { segs, accents, lit, faint = [] } = useMemo(() => shape(variant), [variant])
+  const joints = useMemo(() => {
+    const seen = new Map<string, [number, number]>()
+    if (variant === 'curve' || variant === 'rising') return []
+    for (const [x1, y1, x2, y2] of segs) {
+      seen.set(`${x1.toFixed(1)},${y1.toFixed(1)}`, [x1, y1])
+      seen.set(`${x2.toFixed(1)},${y2.toFixed(1)}`, [x2, y2])
     }
-    return out
-  }, [variant])
+    return [...seen.values()]
+  }, [segs, variant])
 
   return (
-    <svg className={`dotart ${className ?? ''}`} viewBox={`0 0 ${COLS * CELL} ${ROWS * CELL}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <svg className={`art ${className}`} viewBox={`0 0 ${COLS * CELL} ${ROWS * CELL}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
-        <linearGradient id={`${id}sky`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#9DB2D6" />
-          <stop offset="0.55" stopColor="#6F86AC" />
-          <stop offset="1" stopColor="#3F5779" />
+        <linearGradient id={`${id}bg`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor={light} />
+          <stop offset="1" stopColor={mid} />
         </linearGradient>
-        <radialGradient id={`${id}glow`} cx="0.72" cy="0.95" r="0.7">
-          <stop offset="0" stopColor="#FF5C3F" stopOpacity="0.75" />
-          <stop offset="0.45" stopColor="#FF8A5C" stopOpacity="0.25" />
-          <stop offset="1" stopColor="#FF8A5C" stopOpacity="0" />
-        </radialGradient>
+        <filter id={`${id}soft`} x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor={ink} floodOpacity="0.25" />
+        </filter>
       </defs>
-      <rect width="100%" height="100%" fill={`url(#${id}sky)`} />
-      <rect width="100%" height="100%" fill={`url(#${id}glow)`} />
-      {dots.map(({ x, y, level }) => (
-        <circle
-          key={`${x}-${y}`}
-          cx={x * CELL + CELL / 2}
-          cy={y * CELL + CELL / 2}
-          className={level === 3 ? 'accent' : level === 2 ? 'lit' : undefined}
-          style={level >= 2 ? { animationDelay: `${(x + y) * 35}ms` } : undefined}
-          r={level === 3 ? 3.6 : level === 2 ? 3.1 : level === 1 ? 2 : 1.1}
-          fill={level === 3 ? '#FF5C3F' : '#F2F3F5'}
-          opacity={level === 3 ? 1 : level === 2 ? 0.95 : level === 1 ? 0.4 : 0.16}
-        />
+      <rect width="100%" height="100%" fill={`url(#${id}bg)`} />
+      <g opacity="0.35">
+        {Array.from({ length: (COLS / 2) * (ROWS / 2) }, (_, i) => (
+          <circle key={i} cx={px((i % (COLS / 2)) * 2)} cy={px(Math.floor(i / (COLS / 2)) * 2)} r="0.9" fill="#fff" />
+        ))}
+      </g>
+      {faint.map((s, i) => (
+        <line key={`f${i}`} x1={px(s[0])} y1={px(s[1])} x2={px(s[2])} y2={px(s[3])} stroke="#fff" strokeOpacity="0.55" strokeWidth="1.2" strokeDasharray="3 4" />
+      ))}
+      <g className="art-lines" filter={`url(#${id}soft)`} stroke="#fff" strokeWidth="2.4" strokeLinecap="round">
+        {segs.map((s, i) => (
+          <line key={i} x1={px(s[0])} y1={px(s[1])} x2={px(s[2])} y2={px(s[3])} pathLength={1} />
+        ))}
+        {joints.map(([x, y], i) => (
+          <circle key={`j${i}`} cx={px(x)} cy={px(y)} r="3.2" fill="#fff" stroke="none" />
+        ))}
+        {lit &&
+          [...lit].map((k) => {
+            const [x, y] = k.split(',').map(Number)
+            return <circle key={k} cx={px(x)} cy={px(y)} r="2.4" fill="#fff" stroke="none" opacity="0.9" />
+          })}
+      </g>
+      {accents.map(([x, y], i) => (
+        <g key={`a${i}`} className="art-accent" style={{ animationDelay: `${i * 120}ms` }}>
+          <circle cx={px(x)} cy={px(y)} r="9" fill={ink} opacity="0.14" />
+          <circle cx={px(x)} cy={px(y)} r="4.6" fill={ink} />
+        </g>
       ))}
     </svg>
   )

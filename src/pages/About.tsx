@@ -1,74 +1,146 @@
-import { useState } from 'react'
+import { Art } from '../components/Art'
+import { Closing, ExperienceCard, ProjectCard, Statement } from '../components/blocks'
 import { Icon } from '../components/Icons'
-import { Button, Eyebrow, Option, Panel, Stat } from '../components/ui'
-import { RESUME_URL, profile } from '../data'
-import { go, type PageId } from '../router'
+import { Button, Card, IconBubble, Section, Status, Tag } from '../components/ui'
+import { PHOTO_URL, RESUME_URL, arenas, institutions, profile, projects, research } from '../data'
+import { LABELS, type PageId } from '../router'
+
+const PILLAR_ICONS = [<Icon.Flask />, <Icon.Book />, <Icon.Trophy />, <Icon.Users />]
+
+const QUICK_LINKS: { page: PageId; icon: React.JSX.Element; tone: string }[] = [
+  { page: 'research', icon: <Icon.Flask />, tone: 'violet' },
+  { page: 'community', icon: <Icon.Users />, tone: 'blue' },
+  { page: 'olympiads', icon: <Icon.Trophy />, tone: 'rose' },
+  { page: 'projects', icon: <Icon.Book />, tone: 'green' },
+  { page: 'news', icon: <Icon.Clock />, tone: 'teal' },
+  { page: 'resume', icon: <Icon.Download />, tone: 'ink' },
+]
 
 export function About() {
-  const [picked, setPicked] = useState<string | null>(null)
-
   return (
     <>
-      <Panel className="hero">
-        <div className="hero-mark pixel" aria-hidden="true">∑</div>
-        <p className="hero-sub">{profile.tagline}</p>
-        <h1 className="pixel hero-title">{profile.name}</h1>
-        <p className="hero-text">
-          {profile.intro}
-        </p>
-        <span className="hero-loc"><Icon.Pin /> {profile.location}</span>
-      </Panel>
-
-      <div className="stat-row">
-        <Stat value="150" unit="/ 150" label="AMC 12A and 12B" icon={<Icon.Star />} />
-        <Stat value="15" unit="/ 15" label="AIME 2026" icon={<Icon.CheckSquare />} />
-        <Stat value="34" label="competitions won" icon={<Icon.Gem />} />
-        <Stat value="2,500" label="students elected me captain" icon={<Icon.Users />} />
-      </div>
-
-      <div className="action-row">
-        <Button onClick={() => go('research')} icon={<Icon.Flask />}>View research</Button>
-        <Button href={RESUME_URL} download icon={<Icon.Download />}>Download resume</Button>
-        <Button variant="light" onClick={() => go('olympiads')} trailing={<Icon.ChevronRight />}>Olympiad results</Button>
-      </div>
-
-      <section className="split">
-        <Panel className="block">
-          <Eyebrow>Where it started</Eyebrow>
-          <h2 className="pixel h2">No coach. Just books.</h2>
-          {profile.story.map((p) => <p key={p}>{p}</p>)}
-          <p className="muted">{profile.roles}</p>
-        </Panel>
-
-        <Panel className="block">
-          <Eyebrow>My work sits in four places</Eyebrow>
-          <div className="options">
-            {profile.pillars.map((p) => (
-              <Option
-                key={p.key}
-                letter={p.key}
-                selected={picked === p.key}
-                onClick={() => {
-                  setPicked(p.key)
-                  setTimeout(() => go(p.page as PageId), 260)
-                }}
-              >
-                <strong>{p.title}</strong>
-                <span>{p.text}</span>
-              </Option>
-            ))}
+      <section className="hero">
+        <div className="hero-copy">
+          <Status>{profile.status}</Status>
+          <h1 className="hero-title">
+            Hi, I’m Prakhar Singhvi<sup className="hero-mark">∑</sup>
+          </h1>
+          <p className="hero-lead">
+            {profile.tagline} {profile.intro.replace('I am a Grade 12 IBDP student at', 'I study at')}
+          </p>
+          <div className="btn-row">
+            <Button href="#/research">View research</Button>
+            <Button variant="ghost" href={RESUME_URL} download icon={<Icon.Download />}>Resume</Button>
           </div>
-        </Panel>
+        </div>
+
+        <div className="hero-board">
+          <Card className="profile-card">
+            <div>
+              <h2 className="profile-name">{profile.name}</h2>
+              <span className="profile-loc">{profile.location}</span>
+            </div>
+            <div className="profile-collage" aria-hidden="true">
+              <Art variant="curve" className="collage-a" />
+              <Art variant="triangle" className="collage-b" />
+              <Art variant="network" className="collage-c" />
+            </div>
+            <div className="profile-chips">
+              <Tag tone="white"><Icon.Trophy /> Olympiad mathematics</Tag>
+              <Tag tone="blue">AMC 12 · 150/150</Tag>
+            </div>
+          </Card>
+
+          <div className="portrait">
+            {PHOTO_URL ? (
+              <img src={PHOTO_URL} alt={`Portrait of ${profile.name}`} />
+            ) : (
+              <div className="portrait-fallback" role="img" aria-label={profile.name}>
+                <span>PS</span>
+              </div>
+            )}
+          </div>
+
+          <div className="brands">
+            <p>
+              Places I have learned
+              <br />
+              and worked with &lt;3
+            </p>
+            <div className="marquee" aria-label={institutions.join(', ')}>
+              <div className="marquee-track" aria-hidden="true">
+                {[...institutions, ...institutions].map((n, i) => <span key={i}>{n}</span>)}
+              </div>
+            </div>
+          </div>
+
+          <nav className="quick" aria-label="Jump to section">
+            {QUICK_LINKS.map((q) => (
+              <a key={q.page} href={`#/${q.page}`} className={`quick-link tone-${q.tone}`} title={LABELS[q.page]} aria-label={LABELS[q.page]}>
+                {q.icon}
+              </a>
+            ))}
+          </nav>
+        </div>
       </section>
 
-      <Panel className="block quote">
-        <h2 className="pixel quote-title">Questions that start small and refuse to stay small.</h2>
-        <p>{profile.curiosity}</p>
-        <div className="chips">
-          <span className="chips-label">Interests</span>
-          {profile.interests.map((i) => <span key={i} className="chip">{i}</span>)}
+      <Statement marks={arenas} footnote={profile.curiosity.replace('I like questions that start small and refuse to stay small. ', '')}>
+        I like questions that start small and refuse to stay small.
+      </Statement>
+
+      <Section title={<>Where my<br />work sits</>} aside={<p className="muted">{profile.roles}</p>}>
+        <div className="grid-2">
+          {profile.pillars.map((p, i) => (
+            <a key={p.key} className="card service" href={`#/${p.page}`}>
+              <div className="service-top">
+                <IconBubble>{PILLAR_ICONS[i]}</IconBubble>
+                <p>{p.text}</p>
+              </div>
+              <div className="service-bottom">
+                <h3>{p.title}</h3>
+                <span className="service-num">0{i + 1}</span>
+              </div>
+            </a>
+          ))}
         </div>
-      </Panel>
+      </Section>
+
+      <Section
+        title={<>Selected<br />work</>}
+        aside={<Button href="#/projects" trailing={<Icon.ArrowRight />}>See all</Button>}
+      >
+        <div className="grid-2">
+          {projects.slice(0, 4).map((p) => <ProjectCard key={p.title} project={p} />)}
+        </div>
+      </Section>
+
+      <div className="grid-2 experience-grid">
+        <Card className="experience experience-cta">
+          <h2 className="h2">
+            Wanna see
+            <br />
+            my research?
+          </h2>
+          <Button href="#/research" trailing={<Icon.ArrowRight />}>Read more</Button>
+        </Card>
+        {research.slice(0, 3).map((r) => <ExperienceCard key={r.title} item={r} />)}
+      </div>
+
+      <div className="grid-2">
+        <Card className="note">
+          <span className="eyebrow">Where it started</span>
+          <h3 className="h3">No coach. Just books.</h3>
+          {profile.story.map((p) => <p key={p} className="muted">{p}</p>)}
+        </Card>
+        <Card className="note">
+          <span className="eyebrow">Interests</span>
+          <div className="tags">
+            {profile.interests.map((t) => <Tag key={t}>{t}</Tag>)}
+          </div>
+        </Card>
+      </div>
+
+      <Closing />
     </>
   )
 }

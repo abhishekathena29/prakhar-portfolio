@@ -1,42 +1,39 @@
+import { Closing } from '../components/blocks'
 import { Icon } from '../components/Icons'
-import { Eyebrow, IconChip, Panel } from '../components/ui'
+import { Card, IconBubble, PageHead, Tag } from '../components/ui'
 import { forthcoming, news } from '../data'
 
 export function News() {
   return (
     <>
-      <Panel className="hero hero-compact">
-        <p className="hero-sub">Newest first.</p>
-        <h1 className="pixel hero-title">News</h1>
-      </Panel>
+      <PageHead title="News" intro="Newest first." />
 
-      <Panel className="upcoming">
-        <IconChip><Icon.Clock /></IconChip>
+      <section className="upcoming">
+        <IconBubble><Icon.Clock /></IconBubble>
         <div>
-          <Eyebrow>Forthcoming</Eyebrow>
+          <span className="eyebrow">Forthcoming</span>
           <p>{forthcoming}</p>
         </div>
-      </Panel>
+      </section>
 
-      <Panel className="block">
-        <ol className="timeline">
-          {news.map((n, i) => (
-            <li key={n.text} className={i === 0 ? 'latest' : ''}>
-              <span className="pixel timeline-date">{n.date}</span>
-              <span className="timeline-dot" aria-hidden="true" />
-              <div className="timeline-text">
-                {i === 0 && <span className="new-tag">New</span>}
-                <p>{n.text}</p>
-                {n.link && (
-                  <a className="text-link" href={n.link}>
-                    Read on arXiv <Icon.External />
-                  </a>
-                )}
-              </div>
-            </li>
-          ))}
-        </ol>
-      </Panel>
+      <div className="stack stack-tight">
+        {news.map((n, i) => (
+          <Card key={n.text} className="news-row">
+            <span className="news-date">{n.date}</span>
+            <div className="news-text">
+              <p>{n.text}</p>
+              {n.link && (
+                <a className="text-link" href={n.link}>
+                  Read on arXiv <Icon.External />
+                </a>
+              )}
+            </div>
+            {i === 0 && <Tag tone="teal">New</Tag>}
+          </Card>
+        ))}
+      </div>
+
+      <Closing />
     </>
   )
 }

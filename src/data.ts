@@ -4,6 +4,8 @@
 export const ARXIV_URL = '#'
 // Drop the PDF into /public with this name.
 export const RESUME_URL = '/Prakhar_Singhvi_Resume.pdf'
+// Drop a portrait into /public and set this, e.g. '/prakhar.jpg'. Empty shows a monogram card.
+export const PHOTO_URL = ''
 
 export const profile = {
   name: 'Prakhar Singhvi',
@@ -25,12 +27,20 @@ export const profile = {
   roles:
     'I currently serve as School Captain, elected by about 2,500 students, and as President of the Alan Turing Club.',
   interests: ['Curriculum design', 'Mathematical writing', 'Mentoring', 'Competition problem-writing'],
+  status: 'Grade 12 IBDP student',
 } as const
+
+// Shown in the scrolling card in the hero.
+export const institutions = ['Velesium Labs AI', 'Euler Circle', 'UPenn PACT', 'Narayana Prodigy', 'Cuddles Foundation', 'Vimukti NGO', 'Astitva', 'Aanchal']
+
+// Shown as wordmarks under the statement block.
+export const arenas = ['AMC 12', 'AIME', 'BMO', 'IOQM', 'Purple Comet', 'MIT EWB']
 
 export type ArtVariant = 'network' | 'triangle' | 'curve' | 'tree' | 'rising' | 'select' | 'pages' | 'bars'
 
 export type Research = {
   title: string
+  org: string
   role: string
   date: string
   art: ArtVariant
@@ -45,6 +55,7 @@ export const researchIntro = 'I like research that starts with a clean question 
 export const research: Research[] = [
   {
     title: 'Federated Bandit Algorithms (FedIV-Robust)',
+    org: 'Velesium Labs AI',
     role: 'Research Assistant, Velesium Labs AI',
     date: 'Oct 2024 to present',
     art: 'network',
@@ -64,6 +75,7 @@ export const research: Research[] = [
   },
   {
     title: 'Fair Division and Rental Harmony',
+    org: 'Euler Circle',
     role: 'Research Mentee, Euler Circle (IPRW)',
     date: '2026',
     art: 'triangle',
@@ -76,6 +88,7 @@ export const research: Research[] = [
   },
   {
     title: 'The Polynomial Reconstruction Theorem',
+    org: 'Independent',
     role: 'Sole author · Patent pending',
     date: 'Feb 2025 to present',
     art: 'curve',
@@ -86,6 +99,7 @@ export const research: Research[] = [
   },
   {
     title: 'Algorithms at the University of Pennsylvania (PACT)',
+    org: 'UPenn · PACT',
     role: 'Scholar and Peer Mentor, Advanced Group',
     date: 'June 2026',
     art: 'tree',
@@ -95,6 +109,7 @@ export const research: Research[] = [
   },
   {
     title: 'Reinforcement Learning Mentorship',
+    org: 'RL Mentorship',
     role: 'Machine Learning Intern, Cambridge-based research mentorship',
     date: '8 weeks',
     art: 'rising',
@@ -243,6 +258,7 @@ export type Project = {
   art: ArtVariant
   summary: string
   tags: string[]
+  year?: string
   page: 'research' | 'community' | 'olympiads'
 }
 
@@ -251,6 +267,7 @@ export const projects: Project[] = [
   {
     title: 'The Polynomial Reconstruction Theorem',
     kind: 'Theorem · Patent pending',
+    year: '2025',
     art: 'curve',
     summary: 'Recovers any integer-coefficient polynomial from one evaluation p(k), with a carry-correction algorithm for negative coefficients.',
     tags: ['Number theory', 'Algorithms'],
@@ -259,6 +276,7 @@ export const projects: Project[] = [
   {
     title: 'FedIV-Robust',
     kind: 'Research · Velesium Labs AI',
+    year: '2024',
     art: 'network',
     summary: 'The first distributed two-stage least-squares estimator for federated causal bandits, with Byzantine resilience and an Õ(√T + αT) regret bound.',
     tags: ['Federated learning', 'Bandits', 'Causal inference'],
@@ -267,6 +285,7 @@ export const projects: Project[] = [
   {
     title: 'Super 10',
     kind: 'Free olympiad program',
+    year: '2025',
     art: 'select',
     summary: '10 students chosen from 280+ applicants, three live proof-based classes a week. Produced an AMC 8 International Rank 1 and a Purple Comet International Rank 1 team.',
     tags: ['Teaching', 'Curriculum design'],
@@ -291,6 +310,7 @@ export const projects: Project[] = [
   {
     title: 'Envy-free division for n agents',
     kind: 'Expository paper · 17 pages',
+    year: '2026',
     art: 'triangle',
     summary: "A proof via Sperner's Lemma that an envy-free division exists for n agents, with analysis of the Selfridge-Conway and Su Rental Harmony algorithms.",
     tags: ['Fair division', 'Combinatorial topology'],
