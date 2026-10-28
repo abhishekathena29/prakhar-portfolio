@@ -2,8 +2,8 @@ import { Art } from '../components/Art'
 import { Closing } from '../components/blocks'
 import { CountUp } from '../components/CountUp'
 import { Icon } from '../components/Icons'
-import { Button, Card, PageHead, Tag } from '../components/ui'
-import { research, researchIntro } from '../data'
+import { Button, Card, PageHead, Section, Tag } from '../components/ui'
+import { internships, research, researchIntro } from '../data'
 
 export function Research() {
   return (
@@ -26,7 +26,7 @@ export function Research() {
               <h2 className="h2">{r.title}</h2>
               <div className="tags">
                 <Tag tone="teal">{r.role}</Tag>
-                <Tag>{r.date}</Tag>
+                {r.date && <Tag>{r.date}</Tag>}
               </div>
               {r.body.map((p) => <p key={p}>{p}</p>)}
               {r.points && (
@@ -52,6 +52,21 @@ export function Research() {
           </Card>
         ))}
       </div>
+
+      {internships.length > 0 && (
+        <Section title="Internships">
+          <div className="grid-2">
+            {internships.map((n) => (
+              <Card key={n.title} className="experience">
+                <span className="wordmark">{n.role}</span>
+                <h3 className="experience-title">{n.title}</h3>
+                {n.date && <span className="experience-date">{n.date}</span>}
+                {n.body?.map((p) => <p key={p} className="muted">{p}</p>)}
+              </Card>
+            ))}
+          </div>
+        </Section>
+      )}
 
       <Closing />
     </>

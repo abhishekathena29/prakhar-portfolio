@@ -490,18 +490,6 @@ a.card:hover {
   letter-spacing: -0.04em;
 }
 
-.hero-mark {
-  margin-left: 0.04em;
-  font-size: 0.32em;
-  font-weight: 400;
-  vertical-align: 0.15em;
-  display: inline-block;
-  transition: transform 0.6s var(--spring);
-}
-.hero-title:hover .hero-mark {
-  transform: rotate(360deg);
-}
-
 .hero-lead {
   max-width: 470px;
   margin-top: 16px;
@@ -966,6 +954,12 @@ a.experience:hover .wordmark {
 }
 .note .muted {
   font-size: 16px;
+}
+.bio p {
+  max-width: 68ch;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-2);
 }
 
 /* ---------- closing ---------- */

@@ -11,8 +11,15 @@ export const profile = {
   name: 'Prakhar Singhvi',
   tagline: 'Mathematics researcher, olympiad competitor and teacher.',
   location: 'Jaipur, India',
-  intro:
-    'I am a Grade 12 IBDP student at Jayshree Periwal International School. I work on problems in mathematics and theoretical computer science, and I teach what I learn.',
+  // First line is the hero lead; the rest is shown in the "About me" block under the hero.
+  bio: [
+    'I rebuild mathematics from first principles, then teach it the same way.',
+    'Give me one value of an integer polynomial, taken at the right point, and I can recover the whole polynomial. That is my own theorem. I extended it to negative coefficients with a carry-correction algorithm I designed, and it is now patent pending.',
+    'I taught myself olympiad mathematics from the books of Evan Chen and Titu Andreescu. I had no coach and no institute. That path led to perfect scores on the AMC 12 and AIME, and to the Ganit Ratna from Rajasthan’s Minister for School Education.',
+    'My research sits where mathematics meets computer science. I first-authored a paper on how learning algorithms should act under uncertainty. I have also proved when rent can be split so that no housemate envies another.',
+    'No one handed me formulas, so I don’t hand them out either. Through Project Super 10, I taught ten students, chosen from more than 280 applicants, to derive every result themselves. One went on to an International Rank 1 in AMC 8.',
+    'I study at Jayshree Periwal International School in Jaipur.',
+  ],
   story: [
     'I taught myself olympiad mathematics from books and PDFs, with no coach. That experience shaped everything else I do. I know how hard it is to find a clear path through this material. So I built one for others.',
   ],
@@ -31,7 +38,7 @@ export const profile = {
 } as const
 
 // Shown in the scrolling card in the hero.
-export const institutions = ['Velesium Labs AI', 'Euler Circle', 'UPenn PACT', 'Narayana Prodigy', 'Cuddles Foundation', 'Vimukti NGO', 'Astitva', 'Aanchal']
+export const institutions = ['Velesium Labs AI', 'Abstract Math Institute', 'Euler Circle', 'UPenn PACT', 'Aerophanton', 'Narayana Prodigy', 'Cuddles Foundation', 'Vimukti NGO', 'Astitva', 'Aanchal']
 
 // Shown as wordmarks under the statement block.
 export const arenas = ['AMC 12', 'AIME', 'BMO', 'IOQM', 'Purple Comet', 'MIT EWB']
@@ -42,7 +49,7 @@ export type Research = {
   title: string
   org: string
   role: string
-  date: string
+  date?: string
   art: ArtVariant
   body: string[]
   points?: { label: string; text: string }[]
@@ -55,13 +62,13 @@ export const researchIntro = 'I like research that starts with a clean question 
 export const research: Research[] = [
   {
     title: 'Federated Bandit Algorithms (FedIV-Robust)',
-    org: 'Velesium Labs AI',
-    role: 'Research Assistant, Velesium Labs AI',
+    org: 'Abstract Math Institute + Velesium Labs AI',
+    role: 'First author · Research Assistant',
     date: 'Oct 2024 to present',
     art: 'network',
     body: [
-      'Hospitals and banks often cannot share raw records. Pooling their summary statistics should help them find real patterns, such as fraud or treatment effects. But outliers and bad actors can corrupt those statistics.',
-      'My work addresses this in three steps:',
+      'How should a learning algorithm act when it is uncertain, and when some of the data it learns from may be wrong? I first-authored a paper on this question for federated bandits.',
+      'Hospitals and banks often cannot share raw records, so they pool summary statistics instead. Pooling should help them find real patterns, such as fraud or treatment effects. But outliers and bad actors can corrupt those statistics. My work addresses this in three steps:',
     ],
     points: [
       { label: '01', text: 'I built the first distributed two-stage least-squares estimator for federated causal bandits.' },
@@ -80,7 +87,8 @@ export const research: Research[] = [
     date: '2026',
     art: 'triangle',
     body: [
-      "How can a resource be split so that no one envies another's share? I studied classical fairness procedures and wrote a 17-page expository paper. It proves, using Sperner's Lemma, that an envy-free division exists for n agents. I also analyzed the Selfridge-Conway and Su Rental Harmony algorithms, which handle the room-and-rent version of the problem.",
+      'When can rent be split so that no housemate envies another? My Euler Circle paper answers this. Over 17 pages, it proves with Sperner’s Lemma that an envy-free division always exists for n agents.',
+      'Knowing a fair split exists is not the same as finding one. So the paper also works through the Selfridge-Conway procedure and Su’s Rental Harmony algorithm, which turn the existence proof into an actual division of rooms and rent.',
     ],
     notes: [
       'I worked under Dr. Simon Rubinstein-Salzedo (Stanford PhD) and Hmayak Hussaini (CSU). The program awarded me a $2,200 merit scholarship.',
@@ -93,19 +101,17 @@ export const research: Research[] = [
     date: 'Feb 2025 to present',
     art: 'curve',
     body: [
-      "A classical method recovers a polynomial's coefficients from a single evaluation, but only when every coefficient is non-negative. I found this while preparing for the IOQM, working alone.",
-      'I proved that any integer-coefficient polynomial can be recovered from one evaluation p(k), for a suitably large k. I also built a carry-correction algorithm that extends the result to negative coefficients. The recovered polynomial is unique at any degree.',
+      'Give me one value of an integer polynomial, taken at the right point, and I can recover the whole polynomial.',
+      'A classical trick does this, but only when every coefficient is non-negative. I ran into that limit while preparing for the IOQM on my own. I proved that any integer-coefficient polynomial is determined by one evaluation p(k), for a suitably large k. Then I designed a carry-correction algorithm that handles negative coefficients. The recovered polynomial is unique at any degree, and the method is now patent pending.',
     ],
   },
   {
-    title: 'Algorithms at the University of Pennsylvania (PACT)',
-    org: 'UPenn · PACT',
-    role: 'Scholar and Peer Mentor, Advanced Group',
-    date: 'June 2026',
+    // TODO: add the paper's title, date and a short description.
+    title: 'S.-T. Yau High School Science Award Paper',
+    org: 'S.-T. Yau Award',
+    role: 'Author',
     art: 'tree',
-    body: [
-      'I joined the Advanced Group of the Program in Algorithmic and Combinatorial Thinking, a track built for undergraduates. I studied approximation, randomized and distributed algorithms, with a focus on proofs and performance analysis. I mentored six peers and graded their coursework.',
-    ],
+    body: [],
   },
   {
     title: 'Reinforcement Learning Mentorship',
@@ -114,9 +120,17 @@ export const research: Research[] = [
     date: '8 weeks',
     art: 'rising',
     body: [
-      'I was one of about 175 shortlisted applicants. I implemented policy evaluation, policy iteration, value iteration, Monte Carlo, TD(0), SARSA, Q-learning, DQN and REINFORCE from scratch in Gymnasium. I ran a controlled study of epsilon-greedy and UCB exploration. I defended my written report in a live viva.',
+      'I learned reinforcement learning by building it. Over eight weeks in a Cambridge-based mentorship, chosen as one of about 175 shortlisted applicants, I implemented every core algorithm from scratch in Gymnasium: policy evaluation, policy iteration, value iteration, Monte Carlo, TD(0), SARSA, Q-learning, DQN and REINFORCE.',
+      'I then ran a controlled study of how an agent should explore under uncertainty, comparing epsilon-greedy with UCB. I defended my written report in a live viva.',
     ],
   },
+]
+
+export type Internship = { title: string; role: string; date?: string; body?: string[] }
+
+export const internships: Internship[] = [
+  // TODO: add dates and a short description of the work.
+  { title: 'Aerophanton', role: 'Intern' },
 ]
 
 export type CommunityItem = {
@@ -170,9 +184,9 @@ export const community: CommunityItem[] = [
     title: 'Alan Turing Club and LogiLeague',
     role: 'President',
     body: [
-      "I founded the school's first no-syllabus reasoning tournament. Teams are scored on the quality of their justification, not on whether the final answer is right. The judging rubric follows a debate format. In year one, 270 students competed in 54 teams. Participation passed 350 in the following year.",
+      "I founded the school's first no-syllabus reasoning tournament. Teams are scored on the quality of their justification, not on whether the final answer is right. The judging rubric follows a debate format. In year one, 270 students competed in 54 teams. In year two, 130 students took part.",
     ],
-    stat: { value: '350+', label: 'participants in year two', progress: { filled: 270, total: 350 } },
+    stat: { value: '130', label: 'participants in year two' },
   },
   {
     title: 'Fueladream and Cuddles Foundation',
@@ -241,8 +255,8 @@ export const moreResults: { label: string; items: string[] }[] = [
 export const training =
   'I work through texts by Evan Chen, Titu Andreescu and Sheldon Ross. I often spend five or six hours on one problem before I look at a solution. That habit matters more to me than any single score.'
 
-export const pathfinder = {
-  title: 'Pathfinder for Olympiads',
+export const book = {
+  title: 'The Olympiad Mathematician',
   role: 'Author',
   body: [
     'I wrote this book because no single resource covered the whole olympiad path. It is proof-first and covers number theory, combinatorics, algebra and geometry. It uses graded hint ladders instead of full solutions, so students keep the productive struggle. It prepares readers for AMC-AIME, IOQM-RMO and BMO.',
@@ -259,7 +273,7 @@ export type Project = {
   summary: string
   tags: string[]
   year?: string
-  page: 'research' | 'community' | 'olympiads'
+  page: 'research' | 'community' | 'olympiads' | 'projects'
 }
 
 // Projects are drawn from the research, teaching and community sections.
@@ -295,7 +309,7 @@ export const projects: Project[] = [
     title: 'LogiLeague',
     kind: 'Reasoning tournament',
     art: 'bars',
-    summary: 'A no-syllabus tournament scored on the quality of justification, not the final answer. 270 students in year one, 350+ in year two.',
+    summary: 'A no-syllabus tournament scored on the quality of justification, not the final answer. 270 students in year one, 130 in year two.',
     tags: ['Event design', 'Debate-format judging'],
     page: 'community',
   },
@@ -306,6 +320,15 @@ export const projects: Project[] = [
     summary: 'Policy iteration, value iteration, Monte Carlo, TD(0), SARSA, Q-learning, DQN and REINFORCE in Gymnasium, plus a controlled study of epsilon-greedy vs UCB.',
     tags: ['Reinforcement learning', 'Python'],
     page: 'research',
+  },
+  {
+    title: 'PACT at the University of Pennsylvania',
+    kind: 'Scholar and Peer Mentor · Advanced Group',
+    year: '2026',
+    art: 'tree',
+    summary: 'The Advanced Group of the Program in Algorithmic and Combinatorial Thinking, a track built for undergraduates. Approximation, randomized and distributed algorithms, with a focus on proofs and performance analysis. I mentored six peers and graded their coursework.',
+    tags: ['Algorithms', 'Proofs', 'Peer mentoring'],
+    page: 'projects',
   },
   {
     title: 'Envy-free division for n agents',
@@ -319,6 +342,20 @@ export const projects: Project[] = [
 ]
 
 export const forthcoming = 'A mathematics article for The Times of India, written for a general audience.'
+
+export type MediaItem = { outlet: string; title: string; date: string; href?: string }
+
+// News media publications, shown on the News page.
+export const media: MediaItem[] = [
+  // TODO: add each article, e.g. { outlet: 'The Times of India', title: '...', date: 'Oct 2026', href: 'https://...' }
+]
+
+export type Book = { title: string; author: string }
+
+// Shown as a bookshelf on the Olympiads page.
+export const books: Book[] = [
+  // TODO: add the books Prakhar has read, e.g. { title: '...', author: 'Evan Chen' }
+]
 
 export const news: { date: string; text: string; link?: string }[] = [
   { date: 'Sept 2026', text: 'Research on federated bandit algorithms posted to arXiv.', link: ARXIV_URL },

@@ -23,11 +23,9 @@ export function About() {
         <div className="hero-copy">
           <Status>{profile.status}</Status>
           <h1 className="hero-title">
-            Hi, I’m Prakhar Singhvi<sup className="hero-mark">∑</sup>
+            Hi, I’m Prakhar Singhvi
           </h1>
-          <p className="hero-lead">
-            {profile.tagline} {profile.intro.replace('I am a Grade 12 IBDP student at', 'I study at')}
-          </p>
+          <p className="hero-lead">{profile.bio[0]}</p>
           <div className="btn-row">
             <Button href="#/research">View research</Button>
             <Button variant="ghost" href={RESUME_URL} download icon={<Icon.Download />}>Resume</Button>
@@ -83,6 +81,12 @@ export function About() {
           </nav>
         </div>
       </section>
+
+      <Section title={<>About<br />me</>}>
+        <Card className="note bio">
+          {profile.bio.slice(1).map((p) => <p key={p}>{p}</p>)}
+        </Card>
+      </Section>
 
       <Statement marks={arenas} footnote={profile.curiosity.replace('I like questions that start small and refuse to stay small. ', '')}>
         I like questions that start small and refuse to stay small.

@@ -13,7 +13,7 @@ export function Community() {
         {[
           { value: '10', label: 'students selected from 280+ for Super 10' },
           { value: '2,500', label: 'students elected me School Captain' },
-          { value: '350+', label: 'LogiLeague participants in year two' },
+          { value: '130', label: 'LogiLeague participants in year two' },
           { value: '123%', label: 'of the Cuddles Foundation goal in 27 days' },
         ].map((s) => (
           <div key={s.label} className="statement-stat">

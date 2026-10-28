@@ -1,7 +1,7 @@
 import { Art } from '../components/Art'
 import { Closing, ProjectCard } from '../components/blocks'
 import { PageHead, Tag } from '../components/ui'
-import { pathfinder, projects } from '../data'
+import { book, projects } from '../data'
 
 export function Projects() {
   return (
@@ -10,17 +10,17 @@ export function Projects() {
 
       <section className="feature">
         <div className="feature-copy">
-          <Tag tone="white">{pathfinder.role} · Adopted by Narayana Prodigy</Tag>
-          <h2 className="feature-title">{pathfinder.title}</h2>
-          {pathfinder.body.map((p) => <p key={p}>{p}</p>)}
+          <Tag tone="white">{book.role} · Adopted by Narayana Prodigy</Tag>
+          <h2 className="feature-title">{book.title}</h2>
+          {book.body.map((p) => <p key={p}>{p}</p>)}
           <div className="feature-lists">
             <div>
               <span className="eyebrow">Covers</span>
-              <div className="tags">{pathfinder.topics.map((t) => <Tag key={t} tone="white">{t}</Tag>)}</div>
+              <div className="tags">{book.topics.map((t) => <Tag key={t} tone="white">{t}</Tag>)}</div>
             </div>
             <div>
               <span className="eyebrow">Prepares for</span>
-              <div className="tags">{pathfinder.prepares.map((t) => <Tag key={t} tone="white">{t}</Tag>)}</div>
+              <div className="tags">{book.prepares.map((t) => <Tag key={t} tone="white">{t}</Tag>)}</div>
             </div>
           </div>
         </div>

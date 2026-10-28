@@ -1,6 +1,6 @@
 import { Icon } from '../components/Icons'
 import { Button, Card, PageHead } from '../components/ui'
-import { RESUME_URL, community, highlights, pathfinder, profile, research } from '../data'
+import { RESUME_URL, book, community, highlights, internships, media, profile, research } from '../data'
 
 export function Resume() {
   const sections: { title: string; rows: [string, string][] }[] = [
@@ -11,8 +11,10 @@ export function Resume() {
         ['Offered the RIT High School Award', '$116,000 merit scholarship'],
       ],
     },
-    { title: 'Research', rows: research.map((r) => [r.title, `${r.role} · ${r.date}`]) },
-    { title: 'Teaching and writing', rows: [[pathfinder.title, 'Author · adopted by Narayana Prodigy']] },
+    { title: 'Research', rows: research.map((r) => [r.title, r.role + (r.date ? ` · ${r.date}` : '')]) },
+    { title: 'Internships', rows: internships.map((n) => [n.title, n.role + (n.date ? ` · ${n.date}` : '')]) },
+    { title: 'Teaching and writing', rows: [[book.title, 'Author · adopted by Narayana Prodigy']] },
+    { title: 'In the media', rows: media.map((m) => [m.title, `${m.outlet} · ${m.date}`]) },
     { title: 'Leadership and community', rows: community.map((c) => [c.title, c.role + (c.date ? ` · ${c.date}` : '')]) },
     { title: 'Selected honours', rows: highlights.map((h) => [h.competition, h.result]) },
   ]
@@ -27,7 +29,7 @@ export function Resume() {
       </PageHead>
 
       <div className="stack">
-        {sections.map((s) => (
+        {sections.filter((s) => s.rows.length > 0).map((s) => (
           <Card key={s.title} className="resume">
             <h2 className="h3">{s.title}</h2>
             <div className="resume-rows">

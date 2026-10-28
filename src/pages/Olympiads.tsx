@@ -2,7 +2,7 @@ import { Closing, Statement } from '../components/blocks'
 import { CountUp } from '../components/CountUp'
 import { Icon } from '../components/Icons'
 import { Button, Card, PageHead, Section, Tag } from '../components/ui'
-import { arenas, highlights, moreResults, olympiadIntro, pathfinder, training } from '../data'
+import { arenas, book, books, highlights, moreResults, olympiadIntro, training } from '../data'
 
 export function Olympiads() {
   const scored = highlights.filter((h) => h.score)
@@ -64,10 +64,23 @@ export function Olympiads() {
         </div>
       </Section>
 
+      {books.length > 0 && (
+        <Section title={<>Books I<br />have read</>}>
+          <div className="grid-3">
+            {books.map((b) => (
+              <Card key={b.title} className="note">
+                <span className="eyebrow">{b.author}</span>
+                <h3 className="h3">{b.title}</h3>
+              </Card>
+            ))}
+          </div>
+        </Section>
+      )}
+
       <Card className="experience experience-cta wide">
-        <span className="wordmark">{pathfinder.role}</span>
-        <h2 className="h2">{pathfinder.title}</h2>
-        <p className="muted">{pathfinder.body[0]}</p>
+        <span className="wordmark">{book.role}</span>
+        <h2 className="h2">{book.title}</h2>
+        <p className="muted">{book.body[0]}</p>
         <Button href="#/projects" trailing={<Icon.ArrowRight />}>About the book</Button>
       </Card>
 
