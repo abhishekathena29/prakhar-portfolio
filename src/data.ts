@@ -5,7 +5,7 @@ export const ARXIV_URL = '#'
 // Drop the PDF into /public with this name.
 export const RESUME_URL = '/Prakhar_Singhvi_Resume.pdf'
 // Drop a portrait into /public and set this, e.g. '/prakhar.jpg'. Empty shows a monogram card.
-export const PHOTO_URL = ''
+export const PHOTO_URL = '/Photo_Prakhar_Singhvi.jpg.jpeg'
 
 export const profile = {
   name: 'Prakhar Singhvi',
